@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Online Slug Generator - Convert Text to URL-Friendly Slugs</title>
+    <meta name="description" content="Free online slug generator to convert any text into URL-friendly slugs. Perfect for blog posts, product pages, and SEO optimization. No signup required.">
+    <meta name="keywords" content="slug generator, URL slug, text to slug, permalink generator, SEO friendly URL, blog slug">
+    <meta name="robots" content="index, follow">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .lang-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        
+        .lang-toggle:hover {
+            background: white;
+            color: #11998e;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        .card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #11998e;
+        }
+        
+        .presets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .preset-btn {
+            background: #f0f0f0;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #555;
+            transition: all 0.3s;
+        }
+        
+        .preset-btn:hover {
+            background: #11998e;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .result-box {
+            background: #f8f9fa;
+            border: 2px dashed #11998e;
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        
+        .result-text {
+            flex: 1;
+            font-size: 1.3rem;
+            color: #333;
+            font-weight: 500;
+            word-break: break-all;
+        }
+        
+        .result-text.placeholder {
+            color: #999;
+            font-size: 1rem;
+        }
+        
+        .copy-btn {
+            background: #11998e;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .copy-btn:hover {
+            background: #0d7a6e;
+            transform: scale(1.05);
+        }
+        
+        .copy-btn.copied {
+            background: #38ef7d;
+        }
+        
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        
+        .option input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .option label {
+            cursor: pointer;
+            color: #555;
+        }
+        
+        .tips {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .tips h3 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .tips ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .tips li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .tips li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        
+        .examples {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .examples h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .example-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .example-item:last-child {
+            border-bottom: none;
+        }
+        
+        .example-input {
+            flex: 1;
+            color: #666;
+        }
+        
+        .example-arrow {
+            color: #11998e;
+            font-size: 1.2rem;
+            margin: 0 15px;
+        }
+        
+        .example-output {
+            flex: 1;
+            color: #11998e;
+            font-weight: 500;
+        }
+        
+        .faq-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .faq-item {
+            border-bottom: 1px solid #e0e0e0;
+            padding: 15px 0;
+        }
+        
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        
+        .faq-question {
+            color: #333;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-question::after {
+            content: "+";
+            font-size: 1.5rem;
+            color: #11998e;
+            transition: transform 0.3s;
+        }
+        
+        .faq-item.open .faq-question::after {
+            transform: rotate(45deg);
+        }
+        
+        .faq-answer {
+            color: #666;
+            margin-top: 10px;
+            line-height: 1.6;
+            display: none;
+        }
+        
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: white;
+        }
+        
+        footer a {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .result-box {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .copy-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="lang-toggle" onclick="toggleLanguage()">中文</button>
+    
+    <div class="container">
+        <header>
+            <h1 data-en="Free Online Slug Generator" data-zh="免费在线 Slug 生成器">Free Online Slug Generator</h1>
+            <p class="subtitle" data-en="Convert any text into SEO-friendly URL slugs instantly" data-zh="将任意文本即时转换为 SEO 友好的 URL Slug">Convert any text into SEO-friendly URL slugs instantly</p>
+        </header>
+        
+        <div class="card">
+            <h2 data-en="Create Your Slug" data-zh="创建 Slug">Create Your Slug</h2>
+            
+            <div class="input-group">
+                <label data-en="Enter your text:" data-zh="输入文本：">Enter your text:</label>
+                <textarea id="inputText" placeholder="Enter your blog post title, product name, or any text..." data-placeholder-zh="输入博客标题、产品名称或任意文本..."></textarea>
+            </div>
+            
+            <label data-en="Quick presets:" data-zh="快速预设：">Quick presets:</label>
+            <div class="presets">
+                <button class="preset-btn" onclick="applyPreset('blog')" data-en="Blog Post" data-zh="博客文章">Blog Post</button>
+                <button class="preset-btn" onclick="applyPreset('product')" data-en="Product Page" data-zh="产品页面">Product Page</button>
+                <button class="preset-btn" onclick="applyPreset('category')" data-en="Category" data-zh="分类目录">Category</button>
+                <button class="preset-btn" onclick="applyPreset('clear')" data-en="Clear" data-zh="清空">Clear</button>
+            </div>
+            
+            <div class="options">
+                <div class="option">
+                    <input type="checkbox" id="lowercase" checked onchange="generateSlug()">
+                    <label for="lowercase" data-en="Lowercase" data-zh="转小写">Lowercase</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="trimDashes" checked onchange="generateSlug()">
+                    <label for="trimDashes" data-en="Remove leading/trailing dashes" data-zh="去除首尾连字符">Remove leading/trailing dashes</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="removeStopwords" onchange="generateSlug()">
+                    <label for="removeStopwords" data-en="Remove stop words (a, the, in)" data-zh="移除停用词（a, the, in）">Remove stop words (a, the, in)</label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2 data-en="Your Slug" data-zh="生成的 Slug">Your Slug</h2>
+            <div class="result-box">
+                <span id="result" class="result-text placeholder" data-en="Your slug will appear here..." data-zh="生成的 slug 会显示在这里...">Your slug will appear here...</span>
+                <button id="copyBtn" class="copy-btn" onclick="copyToClipboard()" data-en="Copy" data-zh="复制">Copy</button>
+            </div>
+        </div>
+        
+        <div class="card tips">
+            <h3 data-en="💡 SEO Tips for URL Slugs" data-zh="💡 URL Slug 的 SEO 技巧">💡 SEO Tips for URL Slugs</h3>
+            <ul>
+                <li data-en="Keep slugs short and descriptive (under 50 characters)" data-zh="保持 slug 简短且有描述性（50个字符以内）">Keep slugs short and descriptive (under 50 characters)</li>
+                <li data-en="Include your main keyword in the slug" data-zh="在 slug 中包含主要关键词">Include your main keyword in the slug</li>
+                <li data-en="Use hyphens (-) to separate words, never underscores" data-zh="使用连字符（-）分隔单词，不要用下划线">Use hyphens (-) to separate words, never underscores</li>
+                <li data-en="Remove unnecessary words like articles and prepositions" data-zh="删除不必要的词语，如冠词和介词">Remove unnecessary words like articles and prepositions</li>
+                <li data-en="Avoid special characters and spaces" data-zh="避免特殊字符和空格">Avoid special characters and spaces</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <div class="examples">
+                <h3 data-en="📝 Examples" data-zh="📝 示例">📝 Examples</h3>
+                <div class="example-item">
+                    <span class="example-input">"10 Best Travel Tips for 2024"</span>
+                    <span class="example-arrow">→</span>
+                    <span class="example-output">10-best-travel-tips-2024</span>
+                </div>
+                <div class="example-item">
+                    <span class="example-input">"How to Make Coffee at Home?"</span>
+                    <span class="example-arrow">→</span>
+                    <span class="example-output">how-to-make-coffee-home</span>
+                </div>
+                <div class="example-item">
+                    <span class="example-input">"Apple iPhone 15 Pro Max Review"</span>
+                    <span class="example-arrow">→</span>
+                    <span class="example-output">apple-iphone-15-pro-max-review</span>
+                </div>
+                <div class="example-item">
+                    <span class="example-input">"Easy & Quick Recipes: Pasta 🍝"</span>
+                    <span class="example-arrow">→</span>
+                    <span class="example-output">easy-quick-recipes-pasta</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card faq-section">
+            <h2 data-en="Frequently Asked Questions" data-zh="常见问题">Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question" data-en="What is a URL slug?" data-zh="什么是 URL Slug？">What is a URL slug?</div>
+                <div class="faq-answer" data-en="A URL slug is the part of a URL that identifies a specific page in a human-readable way. For example, in 'example.com/blog/my-first-post', 'my-first-post' is the slug. It helps users and search engines understand what the page is about." data-zh="URL slug 是 URL 中以人类可读方式标识特定页面的部分。例如，在 'example.com/blog/my-first-post' 中，'my-first-post' 就是 slug。它帮助用户和搜索引擎理解页面内容。">A URL slug is the part of a URL that identifies a specific page in a human-readable way.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" data-en="Why are slugs important for SEO?" data-zh="为什么 slug 对 SEO 重要？">Why are slugs important for SEO?</div>
+                <div class="faq-answer" data-en="SEO-friendly slugs help search engines understand your page content, improve click-through rates in search results, and make your URLs more user-friendly." data-zh="SEO 友好的 slug 帮助搜索引擎理解页面内容，提高搜索结果中的点击率，并使 URL 更易于用户使用。">SEO-friendly slugs help search engines understand your page content.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" data-en="Should I use hyphens or underscores in slugs?" data-zh="Slug 中应该用连字符还是下划线？">Should I use hyphens or underscores in slugs?</div>
+                <div class="faq-answer" data-en="Always use hyphens (-) in your slugs. Google officially recommends hyphens as word separators in URLs." data-zh="始终在 slug 中使用连字符（-）。Google 官方推荐使用连字符作为 URL 中的单词分隔符。">Always use hyphens (-) in your slugs.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" data-en="How long should a slug be?" data-zh="Slug 应该多长？">How long should a slug be?</div>
+                <div class="faq-answer" data-en="Ideally, keep your slugs under 50 characters. Include the most important keywords but remove unnecessary words." data-zh="理想情况下，将 slug 保持在 50 个字符以内。包含最重要的关键词但删除不必要的词语。">Ideally, keep your slugs under 50 characters.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" data-en="Can I change my slug after publishing?" data-zh="发布后可以更改 slug 吗？">Can I change my slug after publishing?</div>
+                <div class="faq-answer" data-en="Yes, but it's not recommended if the page already has traffic. If you must change it, set up a 301 redirect from the old URL to the new one." data-zh="可以，但如果页面已经有流量或反向链接，则不建议更改。如果必须更改，请设置 301 重定向。">Yes, but set up a 301 redirect if you change it.</div>
+            </div>
+        </div>
+        
+        <footer>
+            <p data-en="Free URL Slug Generator • No signup required" data-zh="免费 URL Slug 生成器 • 无需注册">Free URL Slug Generator • No signup required</p>
+        </footer>
+    </div>
+    
+    <script>
+        const STOP_WORDS = ['a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by', 'the', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should', 'may', 'might', 'must', 'shall', 'can', 'this', 'that', 'these', 'those', 'i', 'you', 'he', 'she', 'it', 'we', 'they'];
+        
+        let currentLang = 'en';
+        
+        function generateSlug() {
+            const input = document.getElementById('inputText').value;
+            const resultEl = document.getElementById('result');
+            
+            if (!input.trim()) {
+                resultEl.textContent = currentLang === 'en' ? 'Your slug will appear here...' : '生成的 slug 会显示在这里...';
+                resultEl.classList.add('placeholder');
+                return;
+            }
+            
+            let slug = input;
+            slug = slug.replace(/<[^>]*>/g, '');
+            slug = slug.replace(/[^\w\s-]/g, '');
+            
+            if (document.getElementById('lowercase').checked) {
+                slug = slug.toLowerCase();
+            }
+            
+            if (document.getElementById('removeStopwords').checked) {
+                const words = slug.split(/[-\s]+/);
+                slug = words.filter(word => !STOP_WORDS.includes(word.toLowerCase())).join('-');
+            }
+            
+            slug = slug.replace(/[\s_]+/g, '-');
+            slug = slug.replace(/-+/g, '-');
+            
+            if (document.getElementById('trimDashes').checked) {
+                slug = slug.replace(/^-+|-+$/g, '');
+            }
+            
+            resultEl.textContent = slug || '...';
+            resultEl.classList.remove('placeholder');
+            document.getElementById('copyBtn').textContent = currentLang === 'en' ? 'Copy' : '复制';
+        }
+        
+        function applyPreset(type) {
+            const presets = {
+                blog: currentLang === 'en' ? '10 Best Travel Tips for 2024' : '10个2024年最佳旅行技巧',
+                product: currentLang === 'en' ? 'Apple iPhone 15 Pro Max 256GB' : 'Apple iPhone 15 Pro Max 256GB',
+                category: currentLang === 'en' ? 'Home & Garden Furniture' : '家居园艺家具',
+                clear: ''
+            };
+            document.getElementById('inputText').value = presets[type];
+            generateSlug();
+        }
+        
+        function copyToClipboard() {
+            const slug = document.getElementById('result').textContent;
+            if (slug && !document.getElementById('result').classList.contains('placeholder')) {
+                navigator.clipboard.writeText(slug).then(() => {
+                    const btn = document.getElementById('copyBtn');
+                    btn.textContent = currentLang === 'en' ? 'Copied!' : '已复制!';
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        btn.textContent = currentLang === 'en' ? 'Copy' : '复制';
+                        btn.classList.remove('copied');
+                    }, 2000);
+                });
+            }
+        }
+        
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'zh' : 'en';
+            document.querySelectorAll('[data-' + (currentLang === 'en' ? 'zh' : 'en') + ']').forEach(el => {
+                const text = el.getAttribute('data-' + currentLang);
+                if (text) el.textContent = text;
+            });
+            const textarea = document.getElementById('inputText');
+            textarea.placeholder = textarea.getAttribute('data-placeholder-' + currentLang) || 'Enter your text...';
+            document.querySelector('.lang-toggle').textContent = currentLang === 'en' ? '中文' : 'EN';
+            generateSlug();
+        }
+        
+        document.querySelectorAll('.faq-question').forEach(q => q.addEventListener('click', () => q.parentElement.classList.toggle('open')));
+        document.getElementById('inputText').addEventListener('input', generateSlug);
+        generateSlug();
+    </script>
+</body>
+</html>
